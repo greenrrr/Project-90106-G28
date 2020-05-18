@@ -1,0 +1,133 @@
+---
+title: "106 Project DA"
+author: "Ziyan Zhao"
+date: "16/05/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+X1: LeadOrigin	
+X2: LeadSource	
+X3: DoNotEmail(Factor)
+X4: DoNotCall(Factor)
+X5: TotalVisits
+X6: TotalTimeSpentOnWebsite
+X7: PageViewsPerVisit	
+X8: LastActivity	
+X9: Country
+X10: Specialization
+X11: WhatIsYourCurrentOccupation	
+X12: WhatMattersMostToYouInChoosingACourse	
+X13: Search	(Factor)
+X14: NewspaperArticle	(Factor)
+X15: XEducationForums	(Factor)
+X16: Newspaper (Factor)
+X17: DigitalAdvertisement	(Factor)
+X18: ThroughRecommendations	(Factor)
+X19: Tags	
+X20: LeadQuality	
+X21: City	
+X22: AFreeCopyOfMasteringTheInterview	(Factor)
+X23: LastNotableActivity	
+X24: Converted (Factor)
+
+Removed X14, X15 and X16 because all of them have only one lead choosing YES and neither of them are converted.
+```{r,echo=T, eval=T,cache=T, message=F,warning=F}
+# Reading Data In
+data <- read.csv("/Users/ChantelleChiu/Desktop/public_data_filtered.csv", header = TRUE, 
+                 stringsAsFactors = F)
+
+names(data) <- c("X1", "X2", "X3", "X4", "X5", "X6", "X7", "X8", "X9", "X10", "X11", 
+                 "X12","X13", "X14", "X15", "X16", "X17", "X18", "X19", "X20", "X21", 
+                 "X22", "X23", "X24")
+
+# Breaking Data into Training and Test Sample
+
+d2 = sort(sample(nrow(data), nrow(data)*.4)) # randomly select 40% of the data as test sample
+train <- data
+test <- data[d2,] 
+train <- subset(train)
+#summary(train)
+```
+
+```{r,echo=T, eval=T,cache=T, message=F,warning=F}
+# Traditional Credit Scoring Using Logistic Regression
+mod1 <- glm(factor(X24)~X1+X2+factor(X3)+factor(X4)+X5+X6+X7+X8+X9+X10+X11+X12+factor(X13)
+            +factor(X14)+factor(X15) + factor(X16)+ factor(X17)+factor(X18)+X19+X20+X21+X22+X23, family = "binomial", 
+            data = train)
+#summary(mod1)
+```
+
+# \textcolor{red}{Conclusion}
+The following features are considered as signidicant: 
+\newline VARIABLE: [Estimate Std., Pr(>|z|)]
+\newline
+\newline - Very Significant (pvalue < 0.001)                            
+\newline X1Landing Page Submission: -1.033e+00, 2.04e-05
+\newline factor(X3)1: -1.310e+00, 9.11e-05
+\newline X6: 1.970e-03, < 2e-16
+\newline X19Busy: 3.731e+00, 3.56e-07
+\newline X19Closed by Horizzon: 7.544e+00, 1.88e-13
+\newline X19Lost to EINS: 8.909e+00, < 2e-16
+\newline X19Will revert after reading the email: 3.684e+00, 9.50e-08
+\newline X20Not Sure: -3.758e+00, < 2e-16
+\newline X20Worst: -4.084e+00, 4.88e-05
+\newline
+\newline - Significant (0.001 < pvalue < 0.01) 
+\newline X19opp: 2.842e+00, 0.0041
+\newline
+\newline - Somewhat Significant (0.01 < pvalue < 0.05)
+\newline X10Business Administration: 7.851e-01, 0.0476
+\newline X19switched off: -3.228e+00, 0.0166 
+\newline X20Might be: -8.344e-01, 0.0327
+\newline
+\newline The remaining variables are considered as non-significant.
+
+
+
+```{r,echo=T, eval=T,cache=T, message=F,warning=F}
+#load tree package
+library(rpart)
+library(rpart.plot)
+
+fit1<-rpart(X24~.,data=train)
+rpart.plot(fit1, type = 1)
+rpart.plot.version1(fit1)
+
+#build model using 90% 10% priors
+#with smaller complexity parameter to allow more complex trees
+fit2 <- rpart(X24~.,data=train,parms=list(prior=c(.9,.1)),cp=.0002)
+rpart.plot.version1(fit2)
+
+## Comparing Complexity and out of Sample Error
+
+#prints complexity and out of sample error 
+printcp(fit1) # find the smallest cross validation error which represented as xerror
+#plots complexity vs. error
+plotcp(fit1)
+#prints complexity and out of sample error 
+printcp(fit2)
+#plots complexity vs. error
+plotcp(fit2)
+```
+
+
+```{r,echo=T, eval=T,cache=T, message=F,warning=F}
+#score test data (Tree)
+test$tscore1<-predict(fit1,type = c("vector", "prob", "class", "matrix"),test)
+head(test$tscore1)
+pred5<-prediction(test$tscore1,test$X24) 
+perf5 <- performance(pred5,"tpr","fpr")
+plot(perf5,col='red',lty=1,main='Tree vs Tree with Prior Prob')
+
+#score test data (Tree with Prior Prob)
+test$tscore2<-predict(fit2,type = c("vector", "prob", "class", "matrix"),test)
+pred6<-prediction(test$tscore2,test$X24) 
+perf6<- performance(pred6,"tpr","fpr")
+plot(perf6, col='green',add=TRUE,lty=2); legend(0.6,0.6,c('simple tree','tree with 90/10 prior'),col=c('red','green'),lwd=3)
+```
+
+
+
