@@ -1,0 +1,26 @@
+﻿Stage,Stage Reason
+Open,On Track
+Open,Awaiting Customer Action
+Open,Academic Capacity (Open)
+Open,BD Capacity (Open)
+Open,IP Issue
+Open,Missed Milestone Date
+Open,Price
+Open,Risk
+Open,Scope of Proposal
+Open,Other (Open)
+Closed Lost,Academic Capacity (Lost)
+Closed Lost,Academic No Longer Interested
+Closed Lost,BD Capacity (Lost)
+Closed Lost,Customer No Longer Interested
+Closed Lost,Customer Not Responding
+Closed Lost,Failure to Agree - IP terms
+Closed Lost,Failure to Agree - Price
+Closed Lost,Failure to Agree - Scope of Work
+Closed Lost,Not Ready for Market
+Closed Lost,Out-Sold
+Closed Lost,Proposal/Application Unsuccessful
+Closed Lost,Unacceptable Risk
+Closed Lost,Other IP Issue
+Closed Lost,Other (Lost)
+Closed Won,Won

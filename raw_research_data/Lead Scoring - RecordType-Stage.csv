@@ -1,0 +1,13 @@
+﻿Record Type,Available Stages
+Research Contract,"Identifying, Developing, Proposing, Closing, Closed Won, Closed Lost"
+Consultancy (Non-research),"Identifying, Developing, Proposing, Closing, Closed Won, Closed Lost"
+Internship,"Identifying, Developing, Proposing, Closing, Closed Won, Closed Lost"
+Philantropic,"Identifying, Developing, Proposing, Closing, Closed Won, Closed Lost"
+Sponsorship,"Identifying, Developing, Proposing, Closing, Closed Won, Closed Lost"
+Panel,"Notice, Identifying, Application, Awaiting Results, Execute Contract, Closed Won, Closed Lost"
+Custom Education (MSPACE Included),"Identifying, Developing, Proposing, Closing, Closed Won, Closed Lost"
+Technology Transfer,"Identifying, Developing, Proposing, Closing, Closed Won, Closed Lost"
+Co-Location,"Develop Relationship / Qualify Opportunity, Triage / Develop Opportunity, Negotiation / Propose, Execution / Closing, Closed Won, Closed Lost"
+Grants,"Identifying, Application, Awaiting Results, Execute Contract, Closed Won, Closed Lost"
+Competitive Bid,"Notice, Identifying, Application, Awaiting Results, Execute Contract, Closed Won, Closed Lost"
+Parent Grant,"Pre-Submission, Submitting, Awaiting Results, Post Award, Closed"
