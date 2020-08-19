@@ -1,0 +1,25 @@
+svm_precision for each labels: [0.33333333 0.14285714 0.2122449  0.         0.         0.3
+ 0.         0.         0.66666667] 
+
+svm_recall for each labels: [0.7        0.08695652 0.67532468 0.         0.         0.10909091
+ 0.         0.         0.00803213] 
+
+svm_f1 for each labels: [0.4516129  0.10810811 0.32298137 0.         0.         0.16
+ 0.         0.         0.01587302] 
+
+
+tree_precision for each labels: [0.91836735 0.07142857 0.92244898 0.18181818 0.42857143 0.2
+ 0.3125     0.         0.33333333] 
+
+tree_recall for each labels: [0.88815789 0.09090909 0.91129032 0.19047619 0.27272727 0.33333333
+ 0.35714286 0.         0.33333333] 
+
+tree_f1 for each labels: [0.90301003 0.08       0.9168357  0.18604651 0.33333333 0.25
+ 0.33333333 0.         0.33333333] 
+
+
+labels['Closed Lost', 'Developing', 'Closed Won', 'Proposing',
+       'Awaiting Results', 'Closing', 'Identifying', 'Execute Contract',
+       'Application']
+
+only keep 'Closed Lost' and 'Closed Won' for training 
