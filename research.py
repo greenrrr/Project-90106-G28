@@ -2,11 +2,12 @@ import pandas as pd
 import os
 import numpy as np
 from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
 import SVM
 
 
 def Load_data():
-    filepath = os.path.join(os.getcwd(),'research_joint_data.csv')
+    filepath = os.path.join(os.getcwd(),'research_1.csv')
     data = pd.read_csv(filepath,index_col = 'Id')
     data = data.dropna(how='all',axis=1)
 
@@ -26,14 +27,14 @@ def Load_data():
             else:
                 data[index] = pd.factorize(data[index])[0].astype(np.uint16)
 
-
-
     x = data
     Labels = x['StageName']
     Trains = x.drop('StageName',axis=1)
-    print(labels_corres)
+    Trains = Trains.drop('Status_Reason__c',axis = 1)
+    names = Trains.columns
 
-    return Trains,Labels
+
+    return Trains,Labels,names
 
 
 def cal_null(col):
@@ -49,7 +50,15 @@ def type_(col):
     else:
         return 'catogerical'
 
-Trains,Labels = Load_data()
+def random_forest(train_set,label_set,test_set,ground_truth):
+    forest_clf = RandomForestRegressor()
+    forest_clf.fit(train_set,label_set)
+    y = forest_clf.predict(test_set)
+    print(sorted(zip(map(lambda x: round(x, 4), forest_clf.feature_importances_),names),
+             reverse=True))
+
+
+Trains,Labels,names = Load_data()
 X_train,X_test,y_train,y_test = train_test_split(Trains,Labels,train_size=0.8,random_state=1)
 svm_precision,svm_recall,svm_f1 = SVM.svc(X_train,y_train,X_test,y_test)
 print('svm_precision for each labels:',svm_precision,'\n')
@@ -59,4 +68,4 @@ tree_precision,tree_recall,tree_f1 = SVM.decision_tree(X_train,y_train,X_test,y_
 print('tree_precision for each labels:',tree_precision,'\n')
 print('tree_recall for each labels:',tree_recall,'\n')
 print('tree_f1 for each labels:',tree_f1,'\n')
-
+random_forest(X_train,y_train,X_test,y_test)
